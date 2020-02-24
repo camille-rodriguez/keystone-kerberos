@@ -1,4 +1,7 @@
 options:
+  display-name:
+    type: string
+    default: 'keystone-kerberos'
   kerberos-realm:
     type: string
     default: ""
