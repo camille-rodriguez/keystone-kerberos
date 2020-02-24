@@ -1,0 +1,28 @@
+charm_name: keystone-kerberos
+smoke_bundles:
+- bionic-queens
+gate_bundles:
+- bionic-queens
+#- bionic-queens-ha
+#configure:
+#- zaza.openstack.charm_tests.vault.setup.auto_initialize
+#- zaza.openstack.charm_tests.saml_mellon.setup.attach_saml_resources
+#- zaza.openstack.charm_tests.keystone.setup.add_demo_user
+#- zaza.openstack.charm_tests.glance.setup.add_lts_image
+#- zaza.openstack.charm_tests.nova.setup.create_flavors
+#- zaza.openstack.charm_tests.nova.setup.manage_ssh_key
+#- zaza.openstack.charm_tests.neutron.setup.basic_overcloud_network
+#- zaza.openstack.charm_tests.saml_mellon.setup.keystone_federation_setup
+#tests:
+#- zaza.openstack.charm_tests.saml_mellon.tests.CharmKeystoneSAMLMellonTest
+#- zaza.openstack.charm_tests.keystone.tests.AuthenticationAuthorizationTest
+#target_deploy_status:
+#  ntp:
+#    workload-status: active
+#    workload-status-message: "chrony: Ready"
+#  vault:
+#    workload-status: blocked
+#    workload-status-message: Vault needs to be initialized
+#  keystone-saml-mellon:
+#    workload-status: blocked
+#    workload-status-message: "Configuration is incomplete. idp-metadata: idp-metadata resource is not a well-formed xml file"
