@@ -3,6 +3,6 @@
 # choices of *requirements.txt files for OpenStack Charms:
 #     https://github.com/openstack-charmers/release-tools
 #
-# Build requirements
-charm-tools>=2.4.4
-simplejson
+# Functional Test Requirements (let Zaza's dependencies solve all dependencies here!)
+git+https://github.com/openstack-charmers/zaza.git#egg=zaza
+git+https://github.com/openstack-charmers/zaza-openstack-tests.git#egg=zaza.openstack
