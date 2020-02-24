@@ -2,6 +2,7 @@ options:
   display-name:
     type: string
     default: 'keystone-kerberos'
+    description: Custom name for UI
   kerberos-realm:
     type: string
     default: ""

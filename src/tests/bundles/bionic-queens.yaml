@@ -144,7 +144,7 @@ services:
     charm: cs:~openstack-charmers-next/vault
   keystone-kerberos:
     series: bionic
-    charm: ../../../keystone-kerberos
+    charm: ../../../../keystone-kerberos
     num_units: 0
     options:
       kerberos-realm: 'testubuntu.com'
