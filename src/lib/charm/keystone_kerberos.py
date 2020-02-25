@@ -12,7 +12,8 @@ import charms_openstack.adapters
 import os
 import shutil
 
-KERBEROS_CONF_TEMPLATE = "kerberos.conf"
+APACHE_CONF_TEMPLATE = "apache-kerberos.conf"
+KERBEROS_CONF_TEMPLATE = "krb5.conf"
 KEYTAB_PATH = "/etc/keystone.keytab"
 
 class KeystoneKerberosCharm(
@@ -26,6 +27,12 @@ class KeystoneKerberosCharm(
 
     # First release supported
     release = 'queens'
+
+    release_pkg = 'keystone-common'
+
+    # Required relations
+    required_relations = [
+        'keystone-fid-service-provider']
 
     # List of packages to install for this charm
     packages = ['libapache2-mod-auth-kerb']
@@ -83,13 +90,41 @@ class KeystoneKerberosCharm(
                                'Unit is ready')
 
     def render_config(self, restart_trigger):
+        """
+        Render Kerberos configuration file and Apache configuration to be used
+        by Keystone.
+        """
+        owner = 'root'
+        group = 'www-data'
+        # using the same parameters as keystone-saml-mellon charm for now
+        dperms = 0o650
+        fileperms = 0o440
+        # ensure that a directory we need is there
+        ch_host.mkdir('/etc/apache2/kerberos', perms=dperms, owner=owner,
+                      group=group)
+
+        self.render_configs(self.string_templates.keys())
+
         checksum = ch_host.file_hash(self.configuration_file)
+        core.templating.render(
+            source=APACHE_CONF_TEMPLATE,
+            template_loader=os_templating.get_loader(
+                'templates/', self.release),
+            target='/etc/apache2/kerberos/{}'.format(APACHE_CONF_TEMPLATE),
+            context=self.adapters_instance,
+            owner=owner,
+            group=group,
+            perms=fileperms
+        )
+
         core.templating.render(
             source=KERBEROS_CONF_TEMPLATE,
             template_loader=os_templating.get_loader(
                 'templates/', self.release),
-            target='/etc/apache2/kerberos/'.format(KERBEROS_CONF_TEMPLATE),
-            context=self.adapters_instance)
+            target="/etc/krb5.conf",
+            context=self.adapters_instance
+        )
+
         tmpl_changed = (checksum !=
                         ch_host.file_hash(self.configuration_file))
         #Could add a check if kerberos info changed, if so, restart trigger
