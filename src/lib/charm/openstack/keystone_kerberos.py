@@ -58,6 +58,7 @@ class KeystoneKerberosCharm(
         """
         return hookenv.config('kerberos-server')
 
+    @staticmethod
     def configuration_complete(self):
         """Determine whether sufficient configuration has been provided
         to configure keystone for use with a Kerberos server
@@ -65,8 +66,8 @@ class KeystoneKerberosCharm(
         :returns: boolean indicating whether configuration is complete
         """
         required_config = {
-            'kerberos_realm': self.options.kerberos-realm,
-            'kerberos_server': self.options.kerberos-server,
+            'kerberos_realm': hookenv.config('kerberos-realm'),
+            'kerberos_server': hookenv.config('kerberos-server'),
         }
         return all(required_config.values())
 
