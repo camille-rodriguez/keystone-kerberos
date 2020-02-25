@@ -8,13 +8,37 @@ import charmhelpers.contrib.openstack.utils as os_utils
 
 import charms_openstack.charm
 import charms_openstack.adapters
+# release detection is done via keystone package given that
+# openstack-origin is not present in the subordinate charm
+# see https://github.com/juju/charm-helpers/issues/83
+import charmhelpers.core.unitdata as unitdata
+from charms_openstack.charm.core import (
+    register_os_release_selector
+)
 
 import os
 import shutil
 
+
 APACHE_CONF_TEMPLATE = "apache-kerberos.conf"
 KERBEROS_CONF_TEMPLATE = "krb5.conf"
 KEYTAB_PATH = "/etc/keystone.keytab"
+
+
+@register_os_release_selector
+def select_release():
+    """Determine the release based on the keystone package version.
+
+    Note that this function caches the release after the first install so
+    that it doesn't need to keep going and getting it from the package
+    information.
+    """
+    release_version = unitdata.kv().get(OPENSTACK_RELEASE_KEY, None)
+    if release_version is None:
+        release_version = os_utils.os_release('keystone')
+        unitdata.kv().set(OPENSTACK_RELEASE_KEY, release_version)
+    return release_version
+
 
 class KeystoneKerberosCharm(
     charms_openstack.charm.OpenStackCharm):
@@ -51,6 +75,7 @@ class KeystoneKerberosCharm(
         """
         return hookenv.config('kerberos-realm')
 
+    @property
     def kerberos_server(self):
         """Server name for the running application
 
