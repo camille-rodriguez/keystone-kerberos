@@ -19,7 +19,7 @@ from charms_openstack.charm.core import (
 import os
 import shutil
 
-
+OPENSTACK_RELEASE_KEY = 'charmers.openstack-release-version'
 APACHE_CONF_TEMPLATE = "apache-kerberos.conf"
 KERBEROS_CONF_TEMPLATE = "krb5.conf"
 KEYTAB_PATH = "/etc/keystone.keytab"
@@ -84,7 +84,7 @@ class KeystoneKerberosCharm(
         return hookenv.config('kerberos-server')
 
     @staticmethod
-    def configuration_complete(self):
+    def configuration_complete():
         """Determine whether sufficient configuration has been provided
         to configure keystone for use with a Kerberos server
 
