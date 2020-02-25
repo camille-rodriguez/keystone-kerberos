@@ -37,6 +37,12 @@ class KeystoneKerberosCharm(
     # List of packages to install for this charm
     packages = ['libapache2-mod-auth-kerb']
 
+    restart_map = {
+        APACHE_CONF_TEMPLATE: [],
+        KERBEROS_CONF_TEMPLATE: [],
+        KEYTAB_PATH: [],
+    }
+
     @property
     def kerberos_realm(self):
         """Realm name for the running application
@@ -52,16 +58,15 @@ class KeystoneKerberosCharm(
         """
         return hookenv.config('kerberos-server')
 
-    @staticmethod
-    def configuration_complete():
+    def configuration_complete(self):
         """Determine whether sufficient configuration has been provided
         to configure keystone for use with a Kerberos server
 
         :returns: boolean indicating whether configuration is complete
         """
         required_config = {
-            'kerberos_realm': hookenv.config('kerberos-realm'),
-            'kerberos_server': hookenv.config('kerberos-server'),
+            'kerberos_realm': self.options.kerberos-realm,
+            'kerberos_server': self.options.kerberos-server,
         }
         return all(required_config.values())
 
@@ -105,7 +110,6 @@ class KeystoneKerberosCharm(
 
         self.render_configs(self.string_templates.keys())
 
-        checksum = ch_host.file_hash(self.configuration_file)
         core.templating.render(
             source=APACHE_CONF_TEMPLATE,
             template_loader=os_templating.get_loader(
@@ -125,16 +129,8 @@ class KeystoneKerberosCharm(
             context=self.adapters_instance
         )
 
-        tmpl_changed = (checksum !=
-                        ch_host.file_hash(self.configuration_file))
-        #Could add a check if kerberos info changed, if so, restart trigger
-        if tmpl_changed:
-            restart_trigger()
 
     def remove_config(self):
-        """
-        Remove the kerberos configuration file and trigger
-        keystone restart.
-        """
-        if os.path.exists(self.configuration_file):
-            os.unlink(self.configuration_file)
+        for f in self.restart_map.keys():
+            if os.path.exists(f):
+                os.unlink(f)
