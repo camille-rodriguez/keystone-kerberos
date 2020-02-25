@@ -39,8 +39,8 @@ def keystone_departed():
 @reactive.when('keystone-fid-service-provider.connected')
 def publish_sp_fid(fid_sp):
     with charm.provide_charm_instance() as charm_instance:
-        fid_sp.publish(charm_instance.kerberos-realm,
-                       charm_instance.kerberos-server)
+        fid_sp.publish(charm_instance.kerberos_realm,
+                       charm_instance.kerberos_server)
 
 
 @reactive.when('keystone-fid-service-provider.available')

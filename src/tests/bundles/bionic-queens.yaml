@@ -145,5 +145,5 @@ services:
     charm: ../../../keystone-kerberos
     num_units: 0
     options:
-      kerberos-realm: 'testubuntu.com'
+      kerberos-realm: 'TESTUBUNTU.COM'
       kerberos-server: 'kerberos.testubuntu.com'

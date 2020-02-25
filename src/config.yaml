@@ -10,7 +10,7 @@ options:
       The domain over which a Kerberos authentication server has the authority
       to authenticate a user, host or service. It is often the upper case
       version fo the name of the DNS domain over which is presides,
-      i.e REALM.COM
+      i.e REALM.COM. Must be in caps.
   kerberos-server:
     type: string
     default: ""
