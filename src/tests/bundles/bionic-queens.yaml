@@ -69,8 +69,6 @@ relations:
   - glance:certificates
 - - vault:certificates
   - openstack-dashboard:certificates
-- - openstack-dashboard
-  - keystone-kerberos
 - - keystone:websso-trusted-dashboard
   - openstack-dashboard:websso-trusted-dashboard
 - - vault:certificates
