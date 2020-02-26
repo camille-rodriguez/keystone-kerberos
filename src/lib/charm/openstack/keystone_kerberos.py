@@ -21,6 +21,7 @@ import shutil
 
 OPENSTACK_RELEASE_KEY = 'charmers.openstack-release-version'
 APACHE_CONF_TEMPLATE = "apache-kerberos.conf"
+APACHE_WSGI_CONF_TEMPLATE = "apache-wsgialias-kerberos.conf"
 KERBEROS_CONF_TEMPLATE = "krb5.conf"
 KEYTAB_PATH = "/etc/keystone.keytab"
 
@@ -141,6 +142,17 @@ class KeystoneKerberosCharm(
             template_loader=os_templating.get_loader(
                 'templates/', self.release),
             target='/etc/apache2/kerberos/{}'.format(APACHE_CONF_TEMPLATE),
+            context=self.adapters_instance,
+            owner=owner,
+            group=group,
+            perms=fileperms
+        )
+
+        core.templating.render(
+            source=APACHE_WSGI_CONF_TEMPLATE,
+            template_loader=os_templating.get_loader(
+                'templates/', self.release),
+            target='/etc/apache2/kerberos/{}'.format(APACHE_WSGI_CONF_TEMPLATE),
             context=self.adapters_instance,
             owner=owner,
             group=group,
