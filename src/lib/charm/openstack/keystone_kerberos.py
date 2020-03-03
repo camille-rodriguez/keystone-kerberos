@@ -22,6 +22,7 @@ import shutil
 OPENSTACK_RELEASE_KEY = 'charmers.openstack-release-version'
 APACHE_CONF_TEMPLATE = "apache-kerberos.conf"
 APACHE_WSGI_CONF_TEMPLATE = "apache-wsgialias-kerberos.conf"
+APACHE_LOCATION = '/etc/apache2/kerberos'
 KERBEROS_CONF_TEMPLATE = "krb5.conf"
 KEYTAB_PATH = "/etc/keystone.keytab"
 
@@ -67,6 +68,15 @@ class KeystoneKerberosCharm(
         KERBEROS_CONF_TEMPLATE: [],
         KEYTAB_PATH: [],
     }
+
+    @property
+    def protocol_name(self):
+        """Protocol name to be used in the auth methods via f
+        id-service-provider interface
+
+        :returns: string: containing the protocol name
+        """
+        return 'kerberos'
 
     @property
     def kerberos_realm(self):
@@ -132,7 +142,7 @@ class KeystoneKerberosCharm(
         dperms = 0o650
         fileperms = 0o440
         # ensure that a directory we need is there
-        ch_host.mkdir('/etc/apache2/kerberos', perms=dperms, owner=owner,
+        ch_host.mkdir(APACHE_LOCATION, perms=dperms, owner=owner,
                       group=group)
 
         self.render_configs(self.string_templates.keys())
@@ -141,7 +151,7 @@ class KeystoneKerberosCharm(
             source=APACHE_CONF_TEMPLATE,
             template_loader=os_templating.get_loader(
                 'templates/', self.release),
-            target='/etc/apache2/kerberos/{}'.format(APACHE_CONF_TEMPLATE),
+            target='{}/{}'.format(APACHE_LOCATION, APACHE_CONF_TEMPLATE),
             context=self.adapters_instance,
             owner=owner,
             group=group,
@@ -152,7 +162,7 @@ class KeystoneKerberosCharm(
             source=APACHE_WSGI_CONF_TEMPLATE,
             template_loader=os_templating.get_loader(
                 'templates/', self.release),
-            target='/etc/apache2/kerberos/{}'.format(APACHE_WSGI_CONF_TEMPLATE),
+            target='{}/{}'.format(APACHE_LOCATION, APACHE_WSGI_CONF_TEMPLATE),
             context=self.adapters_instance,
             owner=owner,
             group=group,
