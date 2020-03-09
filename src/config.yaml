@@ -17,3 +17,14 @@ options:
     description: |
       Kerberos server name. Typically, the server name is composed of a name
       followed by the realm name, i.e, krb5.realm.com
+  kerberos-domain:
+    type: string
+    default: 'k8s'
+    description: |
+      The Openstack domain against which Kerberos authentication should be
+      used.
+  kerberos-keytab: #TODO: to use configuration adapter to add these options in the charm itself
+    type: string
+    default: '/etc/keystone.keytab'
+    description: |
+      The path where the keystone keytab is placed.

@@ -94,6 +94,14 @@ class KeystoneKerberosCharm(
         """
         return hookenv.config('kerberos-server')
 
+    @property
+    def kerberos_domain(self):
+        """Server name for the running application
+
+        :returns: string: containing the server name for the application
+        """
+        return hookenv.config('kerberos-domain')
+
     @staticmethod
     def configuration_complete():
         """Determine whether sufficient configuration has been provided
@@ -104,6 +112,7 @@ class KeystoneKerberosCharm(
         required_config = {
             'kerberos_realm': hookenv.config('kerberos-realm'),
             'kerberos_server': hookenv.config('kerberos-server'),
+            'kerberos_domain': hookenv.config('kerberos-domain'),
         }
         return all(required_config.values())
 
