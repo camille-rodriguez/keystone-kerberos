@@ -167,20 +167,6 @@ class KeystoneKerberosCharm(
                 'templates/', self.release),
             target='{}/{}'.format(APACHE_LOCATION, APACHE_CONF_TEMPLATE),
             context=self.adapters_instance,
-            owner=owner,
-            group=group,
-            perms=fileperms
-        )
-
-        core.templating.render(
-            source=APACHE_WSGI_CONF_TEMPLATE,
-            template_loader=os_templating.get_loader(
-                'templates/', self.release),
-            target='{}/{}'.format(APACHE_LOCATION, APACHE_WSGI_CONF_TEMPLATE),
-            context=self.adapters_instance,
-            owner=owner,
-            group=group,
-            perms=fileperms
         )
 
         core.templating.render(
