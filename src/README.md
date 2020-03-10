@@ -102,3 +102,8 @@ To use the openstack cli, two steps are required.
     source k8s-user.rc
     openstack token issue
 ```
+
+# Bugs
+Please report bugs on [Launchpad](need a link).
+
+For general questions please refer to the OpenStack [Charm Guide](https://docs.openstack.org/charm-guide/latest/).
