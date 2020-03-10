@@ -77,6 +77,8 @@ class KeystoneKerberosCharm(
     # List of packages to install for this charm
     packages = ['libapache2-mod-auth-kerb']
 
+    configuration_class = KeystoneKerberosConfigurationAdapter
+
     restart_map = {
         APACHE_CONF_TEMPLATE: [],
         KERBEROS_CONF_TEMPLATE: [],
