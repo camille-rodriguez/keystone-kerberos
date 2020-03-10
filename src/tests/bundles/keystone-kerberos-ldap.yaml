@@ -3,7 +3,7 @@ variables:
   openstack-origin: &openstack-origin distro
 applications:
   keystone:
-    charm:  ./keystone
+    charm:  cs:keystone
     num_units: 1
     options:
       openstack-origin: *openstack-origin
