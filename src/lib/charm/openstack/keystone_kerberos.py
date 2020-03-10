@@ -125,7 +125,7 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
         """
         required_config = {
             'kerberos_realm': self.options.kerberos_realm,
-            'kerberos_server': self.options.kerveros_server,
+            'kerberos_server': self.options.kerberos_server,
             'kerberos_domain': self.options.kerberos_domain,
             'keytab_path': self.options.keytab_path,
         }
@@ -148,7 +148,7 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
             hookenv.status_set('active',
                                'Unit is ready')
 
-    def render_config(self, restart_trigger):
+    def render_config(self):
         """
         Render Kerberos configuration file and Apache configuration to be used
         by Keystone.

@@ -58,7 +58,7 @@ class Helper(test_utils.PatchHelper):
             "kerberos-domain": self.kerberos_domain,
         }
         self.resources = {
-            "keytab-path": "/path/to/keytab.keytab",
+            "keystone_keytab": "/path/to/keystone.keytab",
         }
         self.patch_object(keystone_kerberos.hookenv, 'config',
                           side_effect=FakeConfig(self.test_config))
@@ -98,22 +98,22 @@ class TestKeystoneKerberosConfigurationAdapter(Helper):
             kkmca.keytab_path, keystone_kerberos.keytab_path)
 
 
-class TestKeystoneSAMLMellonCharm(Helper):
+class TestKeystoneKerberosCharm(Helper):
 
     def setUp(self):
         super().setUp()
         self.patch_object(
             keystone_kerberos.KeystoneKerberosConfigurationAdapter,
             'keytab_path')
-        self.keytab_path.return_value = self.resources["keytab_path"]
-        self.idp_metadata.__bool__.return_value = True
+        self.keytab_path.return_value = self.resources["keystone_keytab"]
+        self.keytab_path.__bool__.return_value = True
 
     def test_configuration_complete(self):
         kk = keystone_kerberos.KeystoneKerberosCharm()
         self.assertTrue(kk.configuration_complete())
 
         # One option not ready
-        self.sp_signing_keyinfo.__bool__.return_value = False
+        self.keytab_path.__bool__.return_value = False
         self.assertFalse(kk.configuration_complete())
 
     def test_custom_assess_status_check(self):
@@ -130,7 +130,7 @@ class TestKeystoneSAMLMellonCharm(Helper):
 
     def test_remove_config(self):
         self.os.path.exists.return_value = True
-        kk = keystone_kerberos.KeystoneKerberosharm()
+        kk = keystone_kerberos.KeystoneKerberosCharm()
         kk.remove_config()
         self.assertEqual(self.os.path.exists.call_count, 3)
         self.assertEqual(self.os.unlink.call_count, 3)
