@@ -81,7 +81,6 @@ class Helper(test_utils.PatchHelper):
         self.patch_object(
             keystone_kerberos.KeystoneKerberosCharm, 'render_configs')
         self.patch_object(keystone_kerberos, 'os')
-        self.patch_object(keystone_kerberos, 'subprocess')
 
         self.patch(
             "builtins.open", new_callable=mock.mock_open(), name="open")
@@ -94,9 +93,9 @@ class Helper(test_utils.PatchHelper):
 class TestKeystoneKerberosConfigurationAdapter(Helper):
 
     def test_keytab_path(self):
-        ksmca = keystone_kerberos.KeystoneKerberosConfigurationAdapter()
+        kkmca = keystone_kerberos.KeystoneKerberosConfigurationAdapter()
         self.assertEqual(
-            ksmca.keytab_path, keystone_kerberos.keytab_path)
+            kkmca.keytab_path, keystone_kerberos.keytab_path)
 
 
 class TestKeystoneSAMLMellonCharm(Helper):
