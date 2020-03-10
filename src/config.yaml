@@ -27,4 +27,5 @@ options:
     type: string
     default: '/etc/keystone.keytab'
     description: |
-      The path where the keystone keytab is placed.
+      The path where the keystone keytab is located locally, to be retrieved
+      and copied in /etc/keystone.keytab on the keystone server.

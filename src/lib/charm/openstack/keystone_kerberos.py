@@ -21,7 +21,6 @@ import shutil
 
 OPENSTACK_RELEASE_KEY = 'charmers.openstack-release-version'
 APACHE_CONF_TEMPLATE = "apache-kerberos.conf"
-APACHE_WSGI_CONF_TEMPLATE = "apache-wsgialias-kerberos.conf"
 APACHE_LOCATION = '/etc/apache2/kerberos'
 KERBEROS_CONF_TEMPLATE = "krb5.conf"
 KEYTAB_PATH = "/etc/keystone.keytab"
@@ -40,6 +39,21 @@ def select_release():
         release_version = os_utils.os_release('keystone')
         unitdata.kv().set(OPENSTACK_RELEASE_KEY, release_version)
     return release_version
+
+
+class KeystoneKerberosConfigurationAdapter(
+        charms_openstack.adapters.ConfigurationAdapter):
+
+    def __init__(self, charm_instance=None):
+        super().__init__(charm_instance=charm_instance)
+        self._keytab_path = None
+
+    @property
+    def keytab_path(self):
+        """Path for they keytab file"""
+        keytab_file = hookenv.resource_get('keystone_keytab')
+        shutil.copy(keytab_file, KEYTAB_PATH)
+        return self._keytab_path
 
 
 class KeystoneKerberosCharm(
@@ -102,8 +116,7 @@ class KeystoneKerberosCharm(
         """
         return hookenv.config('kerberos-domain')
 
-    @staticmethod
-    def configuration_complete():
+    def configuration_complete(self):
         """Determine whether sufficient configuration has been provided
         to configure keystone for use with a Kerberos server
 
@@ -112,7 +125,8 @@ class KeystoneKerberosCharm(
         required_config = {
             'kerberos_realm': hookenv.config('kerberos-realm'),
             'kerberos_server': hookenv.config('kerberos-server'),
-            'kerberos_domain': hookenv.config('kerberos-domain'),
+            'kerberos_domain': self.options.kerberos_domain, # hookenv.config('kerberos-domain'),
+            'keytab_path': self.options.keytab_path,
         }
         return all(required_config.values())
 
@@ -120,12 +134,6 @@ class KeystoneKerberosCharm(
     def kerb_conf_path(self):
         return '/kerberos'
 
-    @property
-    def keytab_path(self):
-        """Path for they keytab file"""
-        keytab_file = hookenv.resource_get('keystone_keytab')
-        shutil.copy(keytab_file, KEYTAB_PATH)
-        return KEYTAB_PATH
 
     def assess_status(self):
         """Determine the current application status for the charm"""
