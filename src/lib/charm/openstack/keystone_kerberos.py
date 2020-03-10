@@ -1,4 +1,3 @@
-from charms.reactive import when, when_not, set_flag
 import charmhelpers.core as core
 import charmhelpers.core.host as ch_host
 import charmhelpers.core.hookenv as hookenv
@@ -57,8 +56,7 @@ class KeystoneKerberosConfigurationAdapter(
         return self._keytab_path
 
 
-class KeystoneKerberosCharm(
-    charms_openstack.charm.OpenStackCharm):
+class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
 
     # Internal name of charm
     service_name = name = 'keystone-kerberos'
@@ -126,9 +124,9 @@ class KeystoneKerberosCharm(
         :returns: boolean indicating whether configuration is complete
         """
         required_config = {
-            'kerberos_realm': hookenv.config('kerberos-realm'),
-            'kerberos_server': hookenv.config('kerberos-server'),
-            'kerberos_domain': self.options.kerberos_domain, # hookenv.config('kerberos-domain'),
+            'kerberos_realm': self.options.kerberos_realm,
+            'kerberos_server': self.options.kerveros_server,
+            'kerberos_domain': self.options.kerberos_domain,
             'keytab_path': self.options.keytab_path,
         }
         return all(required_config.values())
@@ -136,7 +134,6 @@ class KeystoneKerberosCharm(
     @property
     def kerb_conf_path(self):
         return '/kerberos'
-
 
     def assess_status(self):
         """Determine the current application status for the charm"""
@@ -176,7 +173,6 @@ class KeystoneKerberosCharm(
             target="/etc/krb5.conf",
             context=self.adapters_instance
         )
-
 
     def remove_config(self):
         for f in self.restart_map.keys():
