@@ -53,6 +53,7 @@ class KeystoneKerberosConfigurationAdapter(
         """Path for they keytab file"""
         keytab_file = hookenv.resource_get('keystone_keytab')
         shutil.copy(keytab_file, KEYTAB_PATH)
+        self._keytab_path = keytab_file
         return self._keytab_path
 
 
