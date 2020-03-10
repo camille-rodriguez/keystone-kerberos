@@ -153,14 +153,8 @@ class KeystoneKerberosCharm(
         Render Kerberos configuration file and Apache configuration to be used
         by Keystone.
         """
-        owner = 'root'
-        group = 'www-data'
-        # using the same parameters as keystone-saml-mellon charm for now
-        dperms = 0o650
-        fileperms = 0o440
         # ensure that a directory we need is there
-        ch_host.mkdir(APACHE_LOCATION, perms=dperms, owner=owner,
-                      group=group)
+        ch_host.mkdir(APACHE_LOCATION)
 
         self.render_configs(self.string_templates.keys())
 
