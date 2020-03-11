@@ -22,7 +22,7 @@ OPENSTACK_RELEASE_KEY = 'charmers.openstack-release-version'
 APACHE_CONF_TEMPLATE = "apache-kerberos.conf"
 APACHE_LOCATION = '/etc/apache2/kerberos'
 KERBEROS_CONF_TEMPLATE = "krb5.conf"
-KEYTAB_PATH = "/etc/keystone.keytab"
+KEYTAB_DESTINATION_PATH = "/etc/keystone.keytab"
 
 
 @register_os_release_selector
@@ -51,7 +51,7 @@ class KeystoneKerberosConfigurationAdapter(
     def keytab_path(self):
         """Path for they keytab file"""
         keytab_file = hookenv.resource_get('keystone_keytab')
-        shutil.copy(keytab_file, KEYTAB_PATH)
+        shutil.copy(keytab_file, KEYTAB_DESTINATION_PATH)
         self._keytab_path = keytab_file
         return self._keytab_path
 
@@ -81,7 +81,7 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
     restart_map = {
         APACHE_CONF_TEMPLATE: [],
         KERBEROS_CONF_TEMPLATE: [],
-        KEYTAB_PATH: [],
+        KEYTAB_DESTINATION_PATH: [],
     }
 
     @property

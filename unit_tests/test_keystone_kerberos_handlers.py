@@ -94,8 +94,6 @@ class TestKeystoneKerberosHandlers(test_utils.PatchHelper):
 
     def test_publish_sp_fid(self):
         handlers.publish_sp_fid(self.endpoint)
-        print(self.endpoint.protocol_name)
-        print(self.endpoint.kerberos_server)
         self.endpoint.publish.assert_called_once_with(
             self.protocol_name, self.kerberos_server)
 
