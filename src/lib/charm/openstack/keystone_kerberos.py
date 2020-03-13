@@ -71,18 +71,22 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
     # Internal name of charm
 
     service_name = name = 'keystone-kerberos'
+
     # Package to derive application version from
 
     version_package = 'keystone'
+
     # First release supported
 
     release = 'queens'
 
     release_pkg = 'keystone-common'
+
     # Required relations
 
     required_relations = [
         'keystone-fid-service-provider']
+
     # List of packages to install for this charm
 
     packages = ['libapache2-mod-auth-kerb']
@@ -129,7 +133,7 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
             'kerberos_realm': self.options.kerberos_realm,
             'kerberos_server': self.options.kerberos_server,
             'kerberos_domain': self.options.kerberos_domain,
-            #'keytab_path': self.options.keytab_path,
+            'keytab_path': self.options.keytab_path,
         }
         return all(required_config.values())
 
