@@ -55,25 +55,35 @@ class KeystoneKerberosConfigurationAdapter(
         self._keytab_path = keytab_file
         return self._keytab_path
 
+    @property
+    def protocol_name(self):
+        """Protocol name to be used in the auth methods via f
+        id-service-provider interface
+
+        :returns: string: containing the protocol name
+        """
+        return 'kerberos'
+
 
 class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
 
     # Internal name of charm
+
     service_name = name = 'keystone-kerberos'
-
     # Package to derive application version from
-    version_package = 'keystone'
 
+    version_package = 'keystone'
     # First release supported
+
     release = 'queens'
 
     release_pkg = 'keystone-common'
-
     # Required relations
+
     required_relations = [
         'keystone-fid-service-provider']
-
     # List of packages to install for this charm
+
     packages = ['libapache2-mod-auth-kerb']
 
     configuration_class = KeystoneKerberosConfigurationAdapter
@@ -83,15 +93,6 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
         KERBEROS_CONF_TEMPLATE: [],
         KEYTAB_DESTINATION_PATH: [],
     }
-
-    @property
-    def protocol_name(self):
-        """Protocol name to be used in the auth methods via f
-        id-service-provider interface
-
-        :returns: string: containing the protocol name
-        """
-        return 'kerberos'
 
     @property
     def kerberos_realm(self):
@@ -178,3 +179,4 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
         for f in self.restart_map.keys():
             if os.path.exists(f):
                 os.unlink(f)
+
