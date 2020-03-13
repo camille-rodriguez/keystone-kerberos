@@ -165,7 +165,7 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
             template_loader=os_templating.get_loader(
                 'templates/', self.release),
             target='{}/{}'.format(APACHE_LOCATION, APACHE_CONF_TEMPLATE),
-            context=self.adapters_instance(args, charm_instance=self),
+            context=self.adapters_instance,
         )
 
         core.templating.render(
@@ -173,7 +173,7 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
             template_loader=os_templating.get_loader(
                 'templates/', self.release),
             target="/etc/krb5.conf",
-            context=self.adapters_instance(args, charm_instance=self)
+            context=self.adapters_instance,
         )
 
     def remove_config(self):
