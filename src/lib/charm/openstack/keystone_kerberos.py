@@ -51,7 +51,8 @@ class KeystoneKerberosConfigurationAdapter(
     def keytab_path(self):
         """Path for they keytab file"""
         keytab_file = hookenv.resource_get('keystone_keytab')
-        shutil.copy(keytab_file, KEYTAB_DESTINATION_PATH)
+        if keytab_file:
+            shutil.copy(keytab_file, KEYTAB_DESTINATION_PATH)
         self._keytab_path = keytab_file
         return self._keytab_path
 
@@ -128,7 +129,7 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
             'kerberos_realm': self.options.kerberos_realm,
             'kerberos_server': self.options.kerberos_server,
             'kerberos_domain': self.options.kerberos_domain,
-            'keytab_path': self.options.keytab_path,
+            #'keytab_path': self.options.keytab_path,
         }
         return all(required_config.values())
 
@@ -149,7 +150,7 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
             hookenv.status_set('active',
                                'Unit is ready')
 
-    def render_config(self):
+    def render_config(self, *args):
         """
         Render Kerberos configuration file and Apache configuration to be used
         by Keystone.
@@ -164,7 +165,7 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
             template_loader=os_templating.get_loader(
                 'templates/', self.release),
             target='{}/{}'.format(APACHE_LOCATION, APACHE_CONF_TEMPLATE),
-            context=self.adapters_instance,
+            context=self.adapters_instance(args, charm_instance=self),
         )
 
         core.templating.render(
@@ -172,7 +173,7 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
             template_loader=os_templating.get_loader(
                 'templates/', self.release),
             target="/etc/krb5.conf",
-            context=self.adapters_instance
+            context=self.adapters_instance(args, charm_instance=self)
         )
 
     def remove_config(self):
