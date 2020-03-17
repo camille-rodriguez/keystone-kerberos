@@ -184,4 +184,3 @@ class KeystoneKerberosCharm(charms_openstack.charm.OpenStackCharm):
         for f in self.restart_map.keys():
             if os.path.exists(f):
                 os.unlink(f)
-

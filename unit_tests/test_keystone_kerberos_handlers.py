@@ -113,7 +113,6 @@ class TestKeystoneKerberosHandlers(test_utils.PatchHelper):
         handlers.render_config(self.endpoint)
         self.endpoint.request_restart.assert_called_once_with()
 
-
     def test_assess_status(self):
         handlers.assess_status()
         self.keystone_kerberos_charm.assess_status.assert_called_once_with()
