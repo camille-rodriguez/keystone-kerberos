@@ -11,7 +11,7 @@ implementation:
 * https://jaosorior.dev/2018/keberos-for-keystone-with-mod_auth_gssapi/
 
 
-#Usage
+# Usage
 
 Use this charm with the Keystone and Keystone-LDAP charms:
     
@@ -58,7 +58,7 @@ For example, first find the hostname of the keystone server :
     ubuntu@keystone-server$ hostname -f
     keystone-server.project.serverstack
 
-Note #1 : make sure that your keystone server can resolve the Kerberos server 
+Note 1 : make sure that your keystone server can resolve the Kerberos server 
 hostname. If if can't, consider adding an entry to /etc/hosts. 
 
 Then, in the Kerberos server, create the host and service (this example is 
@@ -68,21 +68,23 @@ based on a FreeIPA Kerberos Server):
     ipa service-add HTTP/keystone-server.project.serverstack
     ipa service-add-host HTTP/keystone-server.project.serverstack --hosts=keystone-server.project.serverstack
 
-Note #2 : If you have multiple keystone servers, you should add each host to 
-the principal with the command `ipa host-add-principal keystone-server HTTP/<keystone-other-hostname>@PROJECT.SERVERSTACK`
+Note 2 : If you have multiple keystone servers, you should add each host to 
+the principal with the command 
+
+    ipa host-add-principal keystone-server HTTP/<keystone-other-hostname>@PROJECT.SERVERSTACK
 
 Retrieve the keytab associated with this service:
     
     ipa-getkeytab -p HTTP/keystone-server.project.serverstack -k keystone.keytab
     
-This is the keytab needed in the resources of the keystone-kerberos charm. So, 
-the natural order would be to deploy keystone, keystone-ldap and
-openstack-dashboard first, retrieve the keytab, and then add keystone-kerberos 
-to your deployment. 
+This is the keytab needed in the resources of the keystone-kerberos charm. If 
+you retrieved it post-deploy, you can attach it with a command to keystone:
+
+    juju attach-resource keystone-kerberos/0 keystone_keytab=new_keytab.keytab
 
 # Authentication from a host
 
-To use the openstack cli, two steps are required. 
+To use the Openstack cli, two steps are required. 
 1) Retrieve a token for an existing user in the Kerberos/LDAP directory:
 ```
     kinit <username>
@@ -104,6 +106,6 @@ To use the openstack cli, two steps are required.
 ```
 
 # Bugs
-Please report bugs on [Launchpad](need a link).
+Please report bugs on [Launchpad](link missing).
 
 For general questions please refer to the OpenStack [Charm Guide](https://docs.openstack.org/charm-guide/latest/).
