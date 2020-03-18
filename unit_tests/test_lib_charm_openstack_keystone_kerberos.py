@@ -52,7 +52,6 @@ class Helper(test_utils.PatchHelper):
         self.kerberos_server = "freeipa.project.serverstack"
         self.kerberos_domain = "k8s"
         self.test_config = {
-            "protocol-name": self.protocol_name,
             "kerberos-realm": self.kerberos_realm,
             "kerberos-server": self.kerberos_server,
             "kerberos-domain": self.kerberos_domain,
@@ -81,6 +80,7 @@ class Helper(test_utils.PatchHelper):
         self.patch_object(
             keystone_kerberos.KeystoneKerberosCharm, 'render_configs')
         self.patch_object(keystone_kerberos, 'os')
+        self.patch_object(keystone_kerberos, 'shutil')
 
         self.patch(
             "builtins.open", new_callable=mock.mock_open(), name="open")
