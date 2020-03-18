@@ -47,7 +47,6 @@ class Helper(test_utils.PatchHelper):
 
         self.endpoint = mock.MagicMock()
 
-        self.protocol_name = "kerberos"
         self.kerberos_realm = "project.serverstack"
         self.kerberos_server = "freeipa.project.serverstack"
         self.kerberos_domain = "k8s"
