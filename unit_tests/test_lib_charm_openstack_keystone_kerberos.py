@@ -88,14 +88,14 @@ class Helper(test_utils.PatchHelper):
         self.fileobj.__enter__.return_value = self.file
         self.open.return_value = self.fileobj
 
-# Need advice about this type of unit test.
-# class TestKeystoneKerberosConfigurationAdapter(Helper):
-#
-#     def test_keytab_path(self):
-#         self.os.path.exists.return_value = True
-#         kkca = keystone_kerberos.KeystoneKerberosConfigurationAdapter()
-#         self.assertEqual(
-#             kkca.keytab_path, self.resources['keystone_keytab'])
+
+class TestKeystoneKerberosConfigurationAdapter(Helper):
+
+    def test_keytab_path(self):
+        self.os.path.exists.return_value = True
+        kkca = keystone_kerberos.KeystoneKerberosConfigurationAdapter()
+        self.assertEqual(
+            kkca.keytab_path, self.resources['keystone_keytab'])
 
 
 class TestKeystoneKerberosCharm(Helper):
