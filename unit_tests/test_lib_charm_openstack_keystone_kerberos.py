@@ -91,11 +91,20 @@ class Helper(test_utils.PatchHelper):
 
 class TestKeystoneKerberosConfigurationAdapter(Helper):
 
+    def setUp(self):
+        super().setUp()
+        self.protocol_name = "kerberos"
+
     def test_keytab_path(self):
         self.os.path.exists.return_value = True
         kkca = keystone_kerberos.KeystoneKerberosConfigurationAdapter()
         self.assertEqual(
             kkca.keytab_path, self.resources['keystone_keytab'])
+
+    def test_protocol_name(self):
+        kkca = keystone_kerberos.KeystoneKerberosConfigurationAdapter()
+        self.assertEqual(
+            kkca.protocol_name, self.protocol_name)
 
 
 class TestKeystoneKerberosCharm(Helper):
